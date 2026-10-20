@@ -1,0 +1,828 @@
+/* =================================================================
+   20/10 LOVE LETTER — Cinematic Romance Website
+   Design System & Styles
+   ================================================================= */
+
+/* --- CSS Custom Properties (Design Tokens) --- */
+:root {
+  --bg-void: #020105;
+  --bg-deep: #08030A;
+  --ruby: #B0003A;
+  --burgundy: #5B1027;
+  --rose: #FF7EB6;
+  --champagne: #F6D99B;
+  --ivory: #FFF5E8;
+  --ivory-warm: #FFF0D6;
+  --white-soft: rgba(255, 245, 232, 0.95);
+  --gold-border: rgba(246, 217, 155, 0.4);
+  --shadow-dark: rgba(2, 1, 5, 0.8);
+  --shadow-glow: rgba(176, 0, 58, 0.3);
+
+  --font-display: 'Playfair Display', serif;
+  --font-script: 'Great Vibes', cursive;
+  --font-body: 'Be Vietnam Pro', sans-serif;
+
+  --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --- Base Reset --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-void);
+  color: var(--ivory);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- App Container --- */
+.app-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* --- Three.js Canvas --- */
+.canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.canvas-container canvas {
+  display: block;
+}
+
+/* =================================================================
+   LOADING SCREEN
+   ================================================================= */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-void);
+  transition: opacity 1s var(--transition-smooth);
+}
+
+.loading-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-heart {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  animation: heartbeat 1.2s ease-in-out infinite;
+}
+
+.loading-heart::before,
+.loading-heart::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 32px;
+  background: var(--ruby);
+  border-radius: 20px 20px 0 0;
+}
+
+.loading-heart::before {
+  left: 20px;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
+}
+
+.loading-heart::after {
+  left: 0;
+  transform: rotate(45deg);
+  transform-origin: 100% 100%;
+}
+
+.loading-text {
+  margin-top: 24px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255, 245, 232, 0.5);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.15); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.1); }
+  60% { transform: scale(1); }
+}
+
+/* =================================================================
+   OVERLAY UI — Intro / Gathering Text / Forever Stage
+   ================================================================= */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.overlay > * {
+  pointer-events: auto;
+}
+
+/* --- Intro (Void Stage) --- */
+.intro-container {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlideUp 2s 0.5s var(--transition-smooth) forwards;
+}
+
+.intro-text {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 4vw, 28px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ivory);
+  letter-spacing: 1px;
+  margin-bottom: 40px;
+  text-shadow: 0 0 30px rgba(176, 0, 58, 0.3), 0 0 60px rgba(176, 0, 58, 0.1);
+}
+
+.start-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, rgba(176, 0, 58, 0.2), rgba(91, 16, 39, 0.3));
+  border: 1px solid rgba(246, 217, 155, 0.3);
+  border-radius: 50px;
+  color: var(--champagne);
+  font-family: var(--font-body);
+  font-size: clamp(14px, 2.5vw, 17px);
+  font-weight: 400;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.4s var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.start-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(246, 217, 155, 0.1) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.start-button:hover {
+  background: linear-gradient(135deg, rgba(176, 0, 58, 0.35), rgba(91, 16, 39, 0.5));
+  border-color: rgba(246, 217, 155, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(176, 0, 58, 0.3), 0 0 60px rgba(176, 0, 58, 0.1);
+}
+
+.start-button:hover::before {
+  opacity: 1;
+}
+
+.start-button:active {
+  transform: translateY(0);
+  transition-duration: 0.1s;
+}
+
+.start-button:focus-visible {
+  outline: 2px solid var(--champagne);
+  outline-offset: 4px;
+}
+
+/* --- Gathering Stage Text --- */
+.gathering-text {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 3.5vw, 26px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ivory);
+  text-align: center;
+  max-width: 600px;
+  padding: 0 24px;
+  opacity: 0;
+  text-shadow: 0 0 40px rgba(255, 126, 182, 0.4), 0 0 80px rgba(176, 0, 58, 0.2);
+  line-height: 1.6;
+}
+
+.gathering-text.visible {
+  animation: glowFadeIn 2s var(--transition-smooth) forwards;
+}
+
+/* --- Forever Stage --- */
+.forever-container {
+  text-align: center;
+  padding: 0 24px;
+}
+
+.forever-title {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 3vw, 22px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--champagne);
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: glowFadeIn 2s 0.5s var(--transition-smooth) forwards;
+  text-shadow: 0 0 20px rgba(246, 217, 155, 0.3);
+}
+
+.forever-subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(14px, 2.5vw, 18px);
+  font-weight: 300;
+  color: var(--ivory);
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: glowFadeIn 2s 1.5s var(--transition-smooth) forwards;
+}
+
+.forever-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeSlideUp 1.5s 2.5s var(--transition-smooth) forwards;
+}
+
+.forever-btn {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, rgba(176, 0, 58, 0.15), rgba(91, 16, 39, 0.25));
+  border: 1px solid rgba(246, 217, 155, 0.25);
+  border-radius: 30px;
+  color: var(--champagne);
+  font-family: var(--font-body);
+  font-size: clamp(12px, 2vw, 14px);
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s var(--transition-smooth);
+  letter-spacing: 0.5px;
+}
+
+.forever-btn:hover {
+  background: linear-gradient(135deg, rgba(176, 0, 58, 0.3), rgba(91, 16, 39, 0.4));
+  border-color: var(--champagne);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(176, 0, 58, 0.25);
+}
+
+.forever-btn:active {
+  transform: translateY(0);
+}
+
+.forever-btn:focus-visible {
+  outline: 2px solid var(--champagne);
+  outline-offset: 3px;
+}
+
+/* =================================================================
+   LOVE LETTER
+   ================================================================= */
+.letter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(91, 16, 39, 0.4) 0%, rgba(2, 1, 5, 0.92) 70%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.2s var(--transition-smooth);
+}
+
+.letter-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Envelope */
+.envelope-wrapper {
+  position: absolute;
+  perspective: 1200px;
+}
+
+.envelope {
+  width: clamp(240px, 50vw, 360px);
+  height: clamp(170px, 35vw, 250px);
+  position: relative;
+  transform-style: preserve-3d;
+  opacity: 0;
+  transform: scale(0.3) rotateY(15deg);
+  transition: opacity 1.2s, transform 1.5s var(--transition-spring);
+}
+
+.envelope.visible {
+  opacity: 1;
+  transform: scale(1) rotateY(0deg);
+}
+
+.envelope.opening {
+  transform: scale(0.8) translateY(40px);
+  opacity: 0;
+}
+
+.envelope-body {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #6B1A30, #4A0E22);
+  border: 2px solid rgba(246, 217, 155, 0.35);
+  border-radius: 6px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(176, 0, 58, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.envelope-body::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(246, 217, 155, 0.05), transparent);
+}
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 55%;
+  background: linear-gradient(180deg, #5B1027, #72192F);
+  clip-path: polygon(0 0, 50% 70%, 100% 0);
+  border-top: 2px solid rgba(246, 217, 155, 0.3);
+  transform-origin: top center;
+  transition: transform 1s var(--transition-smooth);
+  z-index: 2;
+}
+
+.envelope.opening .envelope-flap {
+  transform: rotateX(-180deg);
+}
+
+.envelope-seal {
+  position: absolute;
+  top: 28%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
+  z-index: 3;
+  animation: sealGlow 2s ease-in-out infinite;
+}
+
+.envelope-seal::before {
+  content: '♥';
+  font-size: 24px;
+  color: var(--champagne);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(176, 0, 58, 0.8), rgba(91, 16, 39, 0.9));
+  border-radius: 50%;
+  border: 1.5px solid var(--champagne);
+  box-shadow: 0 0 15px rgba(246, 217, 155, 0.3);
+}
+
+/* Letter Paper */
+.letter-paper-container {
+  position: relative;
+  width: clamp(320px, 85vw, 620px);
+  max-height: 80vh;
+  opacity: 0;
+  transform: scale(0.85) translateY(30px);
+  transition: opacity 1s 0.3s, transform 1.2s 0.3s var(--transition-spring);
+}
+
+.letter-paper-container.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.letter-paper {
+  background: linear-gradient(170deg, #FFF5E8, #FFF0D6, #F8E8CC);
+  border-radius: 8px;
+  padding: clamp(24px, 5vw, 48px);
+  max-height: 75vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(176, 0, 58, 0.3) transparent;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 80px rgba(176, 0, 58, 0.1),
+    inset 0 0 30px rgba(246, 217, 155, 0.05);
+  position: relative;
+  border: 1px solid rgba(246, 217, 155, 0.3);
+}
+
+.letter-paper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.letter-paper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.letter-paper::-webkit-scrollbar-thumb {
+  background: rgba(176, 0, 58, 0.3);
+  border-radius: 3px;
+}
+
+/* Decorative corners */
+.letter-paper::before,
+.letter-paper::after {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-color: rgba(246, 217, 155, 0.2);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.letter-paper::before {
+  top: 12px;
+  left: 12px;
+  border-width: 1px 0 0 1px;
+  border-radius: 4px 0 0 0;
+}
+
+.letter-paper::after {
+  bottom: 12px;
+  right: 12px;
+  border-width: 0 1px 1px 0;
+  border-radius: 0 0 4px 0;
+}
+
+/* Letter typography */
+.letter-title {
+  font-family: var(--font-script);
+  font-size: clamp(28px, 6vw, 42px);
+  color: var(--ruby);
+  text-align: center;
+  margin-bottom: 24px;
+  text-shadow: 0 2px 8px rgba(176, 0, 58, 0.15);
+}
+
+.letter-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--champagne), transparent);
+  margin: 0 auto 28px;
+}
+
+.letter-body {
+  font-family: var(--font-body);
+  font-size: clamp(14px, 2.5vw, 16px);
+  font-weight: 300;
+  color: #3A2828;
+  line-height: 1.85;
+  text-align: justify;
+}
+
+.letter-paragraph {
+  margin-bottom: 18px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.8s var(--transition-smooth), transform 0.8s var(--transition-smooth);
+}
+
+.letter-paragraph.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.letter-paragraph.highlight {
+  font-weight: 400;
+  color: #2A0F0F;
+  font-style: italic;
+}
+
+.letter-greeting {
+  font-family: var(--font-display);
+  font-size: clamp(15px, 2.8vw, 18px);
+  font-weight: 500;
+  font-style: italic;
+  color: #4A1515;
+  margin-bottom: 20px;
+}
+
+.letter-closing {
+  margin-top: 30px;
+  text-align: right;
+  font-style: italic;
+  color: #4A1515;
+}
+
+.letter-signature {
+  font-family: var(--font-script);
+  font-size: clamp(22px, 5vw, 32px);
+  color: var(--ruby);
+  text-align: right;
+  margin-top: 16px;
+}
+
+.beating-heart {
+  display: inline-block;
+  font-size: 18px;
+  animation: heartbeat 1.2s ease-in-out infinite;
+  margin-left: 8px;
+}
+
+/* Letter controls */
+.letter-controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.letter-btn {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, rgba(176, 0, 58, 0.12), rgba(91, 16, 39, 0.18));
+  border: 1px solid rgba(176, 0, 58, 0.25);
+  border-radius: 25px;
+  color: var(--ruby);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s var(--transition-smooth);
+}
+
+.letter-btn:hover {
+  background: linear-gradient(135deg, rgba(176, 0, 58, 0.22), rgba(91, 16, 39, 0.3));
+  border-color: var(--ruby);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(176, 0, 58, 0.15);
+}
+
+.letter-btn:active {
+  transform: translateY(0);
+}
+
+.letter-btn:focus-visible {
+  outline: 2px solid var(--ruby);
+  outline-offset: 3px;
+}
+
+/* =================================================================
+   MUSIC CONTROL
+   ================================================================= */
+.music-control {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 50;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(91, 16, 39, 0.4);
+  border: 1px solid rgba(246, 217, 155, 0.2);
+  color: var(--champagne);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s var(--transition-smooth);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.music-control:hover {
+  background: rgba(91, 16, 39, 0.6);
+  border-color: rgba(246, 217, 155, 0.4);
+  transform: scale(1.08);
+}
+
+.music-control:focus-visible {
+  outline: 2px solid var(--champagne);
+  outline-offset: 3px;
+}
+
+.music-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 16px;
+}
+
+.music-bar {
+  width: 3px;
+  background: var(--champagne);
+  border-radius: 1px;
+  transition: height 0.3s;
+}
+
+.music-bars.playing .music-bar:nth-child(1) { animation: musicBar 0.8s ease-in-out infinite; }
+.music-bars.playing .music-bar:nth-child(2) { animation: musicBar 0.8s ease-in-out 0.2s infinite; }
+.music-bars.playing .music-bar:nth-child(3) { animation: musicBar 0.8s ease-in-out 0.4s infinite; }
+.music-bars.playing .music-bar:nth-child(4) { animation: musicBar 0.8s ease-in-out 0.1s infinite; }
+
+.music-bars:not(.playing) .music-bar {
+  height: 4px !important;
+}
+
+@keyframes musicBar {
+  0%, 100% { height: 4px; }
+  50% { height: 16px; }
+}
+
+/* =================================================================
+   FLOATING HEARTS OVERLAY (hug button effect)
+   ================================================================= */
+.floating-hearts-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 30;
+  overflow: hidden;
+}
+
+.floating-heart-emoji {
+  position: absolute;
+  bottom: -40px;
+  font-size: 24px;
+  animation: floatUp 3.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(0.5) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-50vh) scale(1) rotate(15deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-105vh) scale(0.8) rotate(-10deg);
+  }
+}
+
+/* =================================================================
+   ANIMATIONS
+   ================================================================= */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glowFadeIn {
+  from {
+    opacity: 0;
+    text-shadow: 0 0 0 transparent;
+  }
+  to {
+    opacity: 1;
+    text-shadow: 0 0 40px rgba(255, 126, 182, 0.3), 0 0 80px rgba(176, 0, 58, 0.15);
+  }
+}
+
+@keyframes sealGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+
+/* =================================================================
+   REDUCED MOTION
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01s !important;
+  }
+}
+
+/* =================================================================
+   RESPONSIVE ADJUSTMENTS
+   ================================================================= */
+@media (max-width: 480px) {
+  .letter-paper {
+    padding: 20px;
+    max-height: 70vh;
+    border-radius: 6px;
+  }
+
+  .letter-paper::before,
+  .letter-paper::after {
+    width: 30px;
+    height: 30px;
+  }
+
+  .letter-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .forever-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .start-button {
+    padding: 14px 32px;
+  }
+
+  .envelope {
+    width: 220px;
+    height: 155px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .letter-paper-container {
+    max-width: 680px;
+  }
+}
+
+/* WebGL fallback */
+.webgl-fallback {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-void);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  text-align: center;
+  padding: 40px;
+}
+
+.webgl-fallback h1 {
+  font-family: var(--font-script);
+  font-size: 36px;
+  color: var(--ruby);
+  margin-bottom: 20px;
+}
+
+.webgl-fallback p {
+  font-size: 16px;
+  color: var(--ivory);
+  opacity: 0.7;
+  max-width: 400px;
+  line-height: 1.6;
+}
